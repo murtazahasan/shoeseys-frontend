@@ -33,14 +33,15 @@ function Men() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const selectedShirts = [shirts[0], shirts[1], shirts[2]];
-  // const selectedShirts = shirts; // Assuming you want all shirts displayed
+  // const selectedShirts = [shirts[0], shirts[1], shirts[2]];
+  const selectedShirts = shirts;
 
   console.log("Selected Shirts:", selectedShirts);
 
   return (
     <div className="">
-      <h1 className="font-bold text-center text-4xl mt-10">Sneaker</h1>
+      
+      <h1 className="font-bold text-center text-4xl mb-10 mt-10"><span>__</span> Sneaker <span>__</span></h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-4 mx-2 sm:mx-auto max-w-7xl">
         {selectedShirts.map((product) => (
           <ProductCard

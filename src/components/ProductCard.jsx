@@ -38,7 +38,7 @@ const ProductCard = ({
   };
 
   return (
-    <div className=" max-w-40 mx-2 my-6 bg-gray-100 rounded-lg shadow-md overflow-hidden sm:max-w-sm">
+    <div className=" max-w-40 mx-3 my-4 bg-gray-100 rounded-lg shadow-md overflow-hidden sm:max-w-sm">
       <img
         className="sm:w-full h-52 object-fill sm:h-80"
         src={imageUrl[0]}
