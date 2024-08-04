@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -24,13 +25,13 @@ import {
 import TwoPhoto from "./components/TwoPhoto.jsx";
 
 function App() {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   AOS.init();
-  //   AOS.refresh();
-  //   dispatch(loadUserFromToken());
-  // }, [dispatch]);
+  useEffect(() => {
+    // AOS.init();
+    // AOS.refresh();
+    dispatch(loadUserFromToken());
+  }, [dispatch]);
 
   return (
     <>

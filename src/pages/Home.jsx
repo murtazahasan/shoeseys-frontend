@@ -1,8 +1,9 @@
-import React from "react";
-// import { Link, useNavigate } from "react-router-dom";
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "../components/ProductCard";
 function Home() {
   const images = [
@@ -49,15 +50,9 @@ function Home() {
       },
     ],
   };
+
   return (
     <>
-      <div className="">
-        <h1 className="font-bold text-center text-4xl mt-10">Sneaker</h1>
-        <div className="flex sm:mx-20">
-          <ProductCard />
-        </div>
-      </div>
-
       {/* cover , banner */}
       <div className="bg-black text-white pb-20">
         <div className="container mx-auto sm:pt-32 sm:pb-5">
