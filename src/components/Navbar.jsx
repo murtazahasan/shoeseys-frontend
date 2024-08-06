@@ -1,11 +1,20 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { signOutAndClearCart } from "../reducers/authSlice";
+import { useSnackbar } from "notistack";
 import { HiMenuAlt3, HiMenuAlt1 } from "react-icons/hi";
 import { VscSearch } from "react-icons/vsc";
 import { FaRegUserCircle } from "react-icons/fa";
-import { RiLogoutCircleRLine } from "react-icons/ri"; // <RiLogoutCircleRLine />
+import { RiLogoutCircleRLine } from "react-icons/ri";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+
   const [showMenu, setShowMenu] = useState(false);
   const [showMenSubmenu, setShowMenSubmenu] = useState(false);
   const [showWomenSubmenu, setShowWomenSubmenu] = useState(false);
@@ -21,12 +30,23 @@ const Navbar = () => {
     });
   };
 
+  const handleSignOut = () => {
+    dispatch(signOutAndClearCart());
+    enqueueSnackbar("Signed out successfully", { variant: "info" });
+  };
+
+  const both = () => {
+    toggleMenu();
+    scrollToTop();
+  };
+
   const menuItems = [
     { name: "Home", path: "/" },
     {
       name: "Men",
       path: "/men",
       submenu: [
+        "All",
         "Sneakers & Casual Shoes",
         "Formal Shoes",
         "Sports Shoes",
@@ -40,6 +60,7 @@ const Navbar = () => {
       name: "Women",
       path: "/women",
       submenu: [
+        "all",
         "Pumps & Khusa",
         "Heels & Sandals",
         "Loafers",
@@ -52,7 +73,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-gray-100 shadow-md py-4">
+    <nav className="bg-gray-100 shadow-md py-4 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <button onClick={toggleMenu} className="md:hidden">
@@ -80,6 +101,7 @@ const Navbar = () => {
                 <NavLink
                   to={item.path}
                   className="text-gray-700 hover:text-blue-500"
+                  onClick={scrollToTop}
                 >
                   {item.name}
                 </NavLink>
@@ -108,6 +130,7 @@ const Navbar = () => {
                 key={item.name}
                 to={item.path}
                 className="text-gray-700 hover:text-blue-500"
+                onClick={scrollToTop}
               >
                 {item.name}
               </NavLink>
@@ -116,23 +139,37 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-3">
           <NavLink
-            to="/login"
+            to="search"
             className=" text-gray-700 rounded hover:bg-blue-400"
+            onClick={scrollToTop}
           >
             <VscSearch className=" ml-2" />
             <p className="" style={{ fontSize: "10px" }}>
               Search
             </p>
           </NavLink>
-          <NavLink
-            to="/login"
-            className="  text-gray-700 rounded hover:bg-blue-400"
-          >
-            <FaRegUserCircle className="ml-1" />
-            <p className="" style={{ fontSize: "10px" }}>
-              Login
-            </p>
-          </NavLink>
+          {isAuthenticated ? (
+            <NavLink
+              className="text-gray-700 hover:text-blue-500"
+              onClick={handleSignOut}
+            >
+              <RiLogoutCircleRLine className="ml-1" />
+              <p className="" style={{ fontSize: "10px" }}>
+                Logout
+              </p>
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/login"
+              className="text-gray-700 hover:text-blue-500"
+              onClick={scrollToTop}
+            >
+              <FaRegUserCircle className="ml-1" />
+              <p className="" style={{ fontSize: "10px" }}>
+                Login
+              </p>
+            </NavLink>
+          )}
         </div>
       </div>
       {/*  */}
@@ -183,7 +220,7 @@ const Navbar = () => {
                             .toLowerCase()
                             .replace(/ /g, "-")}`}
                           className="block text-gray-700 hover:text-blue-500"
-                          onClick={toggleMenu}
+                          onClick={both}
                         >
                           {subItem}
                         </NavLink>
@@ -199,7 +236,7 @@ const Navbar = () => {
                   <NavLink
                     to={item.path}
                     className="text-gray-700 hover:text-blue-500 "
-                    onClick={toggleMenu}
+                    onClick={both}
                   >
                     {item.name}
                   </NavLink>
