@@ -40,12 +40,15 @@ export const { signIn, signOut, loadUser } = authSlice.actions;
 
 export const signOutAndClearCart = () => async (dispatch, getState) => {
   const { token } = getState().auth;
+  console.log("Token retrieved from state:", token);
   try {
+    console.log("Attempting to clear cart...");
     await axios.delete("http://localhost:4000/user/cart/clear", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log("Cart cleared successfully. Signing out...");
     dispatch(signOut());
   } catch (error) {
     console.error("Failed to clear cart and sign out:", error);

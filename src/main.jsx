@@ -75,7 +75,7 @@ const router = createBrowserRouter([
         element: <CartSection />,
       },
       {
-        path: "products",
+        path: "products/:productId",
         element: <ProductDetail />,
       },
       {
@@ -86,10 +86,14 @@ const router = createBrowserRouter([
         path: "checkout-success",
         element: <CheckoutSuccess />,
       },
-      // sub-menus
+      // sub-menus men
       {
         path: "men/sneakers-&-casual-shoes",
         element: <SneakerType />,
+      },
+      {
+        path: "men/All",
+        element: <Men />,
       },
       {
         path: "men/formal-shoes",
@@ -115,9 +119,14 @@ const router = createBrowserRouter([
         path: "men/shoe-care-products",
         element: <ShoeCare />,
       },
+      // sub-menus women
       {
         path: "women/pumps-&-khusa",
         element: <PumpKhusa />,
+      },
+      {
+        path: "women/all",
+        element: <Women />,
       },
       {
         path: "women/heels-&-sandals",
