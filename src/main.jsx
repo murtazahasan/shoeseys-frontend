@@ -88,12 +88,12 @@ const router = createBrowserRouter([
       },
       // sub-menus men
       {
-        path: "men/sneakers-&-casual-shoes",
-        element: <SneakerType />,
-      },
-      {
         path: "men/All",
         element: <Men />,
+      },
+      {
+        path: "men/sneakers-&-casual-shoes",
+        element: <SneakerType />,
       },
       {
         path: "men/formal-shoes",
@@ -121,12 +121,12 @@ const router = createBrowserRouter([
       },
       // sub-menus women
       {
-        path: "women/pumps-&-khusa",
-        element: <PumpKhusa />,
-      },
-      {
         path: "women/all",
         element: <Women />,
+      },
+      {
+        path: "women/pumps-&-khusa",
+        element: <PumpKhusa />,
       },
       {
         path: "women/heels-&-sandals",
