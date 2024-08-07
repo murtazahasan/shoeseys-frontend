@@ -51,6 +51,42 @@ function Home() {
     ],
   };
 
+  // for products
+
+  const [mensneakers, setmenSneakers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  console.log("Initial State:", { mensneakers, loading, error });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const sneakerResponse = await axios.get(
+          "http://localhost:4000/products?category=men-sneakers-casual-shoes"
+        );
+        console.log("Fetched sneakers:", sneakerResponse.data.products);
+
+        setmenSneakers(sneakerResponse.data.products);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  // const selectedSneakers = mensneakers;
+  const selectedSneakers = [mensneakers[0],mensneakers[2]];
+
+  console.log("Selected Sneakers:", selectedSneakers);
+
   return (
     <>
       {/* cover , banner */}
@@ -79,7 +115,7 @@ function Home() {
       </div>
 
       {/* link carousel  */}
-      <div className="px-8 mt-10 mb-5 carousel-container relative bg-black">
+      <div className="px-8 mt-2 mb-5 carousel-container relative bg-black">
         <Slider {...settings}>
           {images.map((image, index) => (
             <div key={index} className="slide relative p-8">
@@ -96,6 +132,23 @@ function Home() {
             </div>
           ))}
         </Slider>
+      </div>
+
+      {/* best  */}
+      <div className="">
+        <h1 className="font-bold text-center text-4xl mb-10 mt-10">
+          <span>__</span> Sneaker <span>__</span>
+        </h1>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-4 mx-2 sm:mx-auto max-w-7xl">
+          {selectedSneakers.map((product) => (
+            <ProductCard
+              key={product._id}
+              {...product}
+              id={product._id}
+              type="sneaker"
+            />
+          ))}
+        </div>
       </div>
     </>
   );
