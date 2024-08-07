@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {
   addToCart,
@@ -111,7 +111,7 @@ const ProductDetail = () => {
                       src={image}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-96 object-contain"
-                      style={{ maxHeight: '400px' }}
+                      style={{ maxHeight: "400px" }}
                     />
                   </a>
                 </div>
@@ -138,12 +138,38 @@ const ProductDetail = () => {
               <span className="text-lg">{product.discountPrice}</span>
             </div>
 
+            {/* Product variations section */}
+            {/* <div className="mt-4">
+              <h2 className="text-lg font-bold">Size</h2>
+              <div className="flex space-x-2">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    className="border border-gray-300 px-2 py-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div> */}
+
             <button
               onClick={handleAddToCart}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-xl mt-4 flex"
             >
               Add to Cart <GrAddCircle className="ml-2 mt-1" />
             </button>
+            {/* Add to cart button */}
+            {/* {stockStatus()}
+          {inCart ? (
+            <button onClick={handleRemoveFromCart} className="btn btn-danger">
+              Remove <AiFillDelete className="mb-1" />
+            </button>
+          ) : product.stock > 0 ? (
+            <button onClick={handleAddToCart} className="btn btn-success">
+              Add to Cart <GrAddCircle className="mb-1" />
+            </button>
+          ) : null} */}
           </section>
         </div>
       </div>
