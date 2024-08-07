@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import {
   addToCart,
   removeFromCart,
   saveCartToDatabase,
   removeCartItemFromDatabase,
 } from "../reducers/cartSlice";
-import { AiFillDelete } from "react-icons/ai";
 import { GrAddCircle } from "react-icons/gr";
 
 const ProductDetail = () => {
@@ -51,7 +52,7 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = (e) => {
-    e.stopPropagation(); // Prevent navigation when clicking on "Add to Cart"
+    e.stopPropagation();
     if (!isAuthenticated) {
       scrollToTop();
       enqueueSnackbar("You need to be signed in to add items to the cart.", {
@@ -98,15 +99,24 @@ const ProductDetail = () => {
       <h1 className="text-4xl font-bold text-center mt-10 mb-6">
         Product Detail
       </h1>
-      <div className=" container mx-auto ">
-        <div className="  border mx-5 md:mx-auto rounded-3xl md:px-40  px-6 py-6 mb-14  grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="container mx-auto">
+        <div className="border mx-5 md:mx-auto rounded-3xl md:px-40 px-6 py-6 mb-14 grid grid-cols-1 md:grid-cols-12 gap-4">
           {/* Product image section */}
           <section className="md:col-span-6 flex justify-center items-center">
-            <img
-              src={product.imageUrl[0]}
-              alt={product.name}
-              className="w-full h-auto object-cover rounded-3xl md:w-auto md:h-auto"
-            />
+            <Carousel showThumbs={false} dynamicHeight>
+              {product.imageUrl.map((image, index) => (
+                <div key={index} className="flex justify-center items-center">
+                  <a href={image} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      className="w-full h-96 object-contain"
+                      style={{ maxHeight: '400px' }}
+                    />
+                  </a>
+                </div>
+              ))}
+            </Carousel>
           </section>
 
           {/* Product information section */}
@@ -128,24 +138,11 @@ const ProductDetail = () => {
               <span className="text-lg">{product.discountPrice}</span>
             </div>
 
-            {/* Product variations section */}
-            {/* <div className="mt-4">
-              <h2 className="text-lg font-bold">Size</h2>
-              <div className="flex space-x-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    className="border border-gray-300 px-2 py-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div> */}
-
-            {/* Add to cart button */}
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-              Add to Cart
+            <button
+              onClick={handleAddToCart}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-xl mt-4 flex"
+            >
+              Add to Cart <GrAddCircle className="ml-2 mt-1" />
             </button>
           </section>
         </div>
