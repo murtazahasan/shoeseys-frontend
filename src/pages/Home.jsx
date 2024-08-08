@@ -1,74 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "../components/ProductCard";
-function Home() {
-  const images = [
-    { src: "ms1.jpg", alt: "Image 1", text: "Image 1 Text", link: "/page1" },
-    {
-      src: "gmail36.png",
-      alt: "Image 2",
-      text: "Image 2 Text",
-      link: "/page2",
-    },
-    { src: "ms2.jpg", alt: "Image 3", text: "Image 3 Text", link: "/page3" },
-    { src: "ms3.jpg", alt: "Image 4", text: "Image 4 Text", link: "/page4" },
-    { src: "ms4.jpg", alt: "Image 5", text: "Image 5 Text", link: "/page5" },
-    {
-      src: "ms5.jpg",
-      alt: "Image 4",
-      text: "Image 6 Text",
-      link: "/page4",
-    },
-  ];
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: true,
-    // variableWidth: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
-
-  // for products
-
-  const [mensneakers, setmenSneakers] = useState([]);
+const Home = () => {
+  const [products, setProducts] = useState({
+    mensSneakers: [],
+    menFormal: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  console.log("Initial State:", { mensneakers, loading, error });
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const sneakerResponse = await axios.get(
-          "http://localhost:4000/products?category=men-sneakers-casual-shoes"
-        );
-        console.log("Fetched sneakers:", sneakerResponse.data.products);
 
-        setmenSneakers(sneakerResponse.data.products);
+        const responses = await Promise.all([
+          axios.get("http://localhost:4000/products?category=men-sneakers-casual-shoes"),
+          axios.get("http://localhost:4000/products?category=men-formal-shoes"),
+        ]);
+
+        setProducts({
+          mensSneakers: responses[0].data.products,
+          menFormal: responses[1].data.products,
+        });
       } catch (error) {
         setError(error.message);
       } finally {
@@ -79,79 +34,40 @@ function Home() {
     fetchProducts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const getSelectedProducts = (productData, indexes) => {
+    return indexes.map(index => productData[index]).filter(Boolean);
+  };
 
-  // const selectedSneakers = mensneakers;
-  const selectedSneakers = [mensneakers[0],mensneakers[2]];
+  const renderProductsSection = (title, productData, indexes) => {
+    const selectedProducts = getSelectedProducts(productData, indexes);
 
-  console.log("Selected Sneakers:", selectedSneakers);
+    return (
+      <section className="mb-10">
+        <h2 className="text-2xl text-center font-bold mb-4">{title}</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-4">
+          {selectedProducts.map((product) => (
+            <ProductCard key={product._id} {...product} />
+          ))}
+        </div>
+      </section>
+    );
+  };
 
   return (
-    <>
-      {/* cover , banner */}
-      <div className="bg-black text-white pb-20">
-        <div className="container mx-auto sm:pt-32 sm:pb-5">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:order-2">
-              <img
-                src="b3.png"
-                alt="Image"
-                className="w-full md:h-auto md:max-h-96 object-cover"
-              />
-            </div>
-            <div className="md:order-1 md:w-1/2">
-              <h1 className="text-2xl font-bold mt-16 mx-16">
-                Find Your Dream
-              </h1>
-              <h1 className="text-2xl font-bold mb-4 mx-16">Sneakers</h1>
-              <p className="text-gray-700 mx-16 mb-16">
-                Upgrade your shoe game with the finest quality with our premium
-                footwear.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container mx-auto py-10">
+      {loading && <div className="text-center">Loading...</div>}
+      {error && <div className="text-center text-red-500">Error: {error}</div>}
 
-      {/* link carousel  */}
-      <div className="px-8 mt-2 mb-5 carousel-container relative bg-black">
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index} className="slide relative p-8">
-              <Link to={image.link}>
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="rounded-full object-cover h-32 sm:h-64 w-full"
-                />
-              </Link>
-              <div className="text-container absolute inset-x-0 bottom-0 px-4 py-4 bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center">
-                <p className="text-white text-center font-bold">{image.text}</p>
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
-
-      {/* best  */}
-      <div className="">
-        <h1 className="font-bold text-center text-4xl mb-10 mt-10">
-          <span>__</span> Sneaker <span>__</span>
-        </h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-4 mx-2 sm:mx-auto max-w-7xl">
-          {selectedSneakers.map((product) => (
-            <ProductCard
-              key={product._id}
-              {...product}
-              id={product._id}
-              type="sneaker"
-            />
-          ))}
-        </div>
-      </div>
-    </>
+      {!loading && !error && (
+        <>
+          {products.mensSneakers.length > 0 &&
+            renderProductsSection("- Best Sellers -", products.mensSneakers, [0, 2, 1])}
+          {products.menFormal.length > 0 &&
+            renderProductsSection("", products.menFormal, [0, 2, 1])}
+        </>
+      )}
+    </div>
   );
-}
+};
 
 export default Home;
